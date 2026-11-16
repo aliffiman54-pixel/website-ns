@@ -12,7 +12,7 @@ const RESULTS = {
   7: [2, 0], // The OTC 2-0 NS Havoc
   8: [1, 2], // NS Echo 1-2 NS Gamma
   // Week 2
-  9: [2, 0], // NS Chaos 2-0 ESC
+  9: [2, 1], // NS Chaos 2-1 ESC
 };
 
 const FIXTURES = [
