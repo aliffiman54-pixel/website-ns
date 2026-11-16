@@ -172,9 +172,11 @@ const RULES = [
   [29, "Player Disqualification & RM100 Fine", ["Pemain yang menerima Disqualification (DQ) selepas proses siasatan dikenakan denda RM100 bagi setiap pemain yang di-DQ.", "Bayaran denda tidak membatalkan hukuman DQ. Pasukan dan pemain mesti dimaklumkan syarat ini sebelum pertandingan.", "Pelaksanaan dan kutipan denda tertakluk persetujuan bertulis peserta serta undang-undang yang terpakai.", "Tanggungjawab pembayar dan proses kutipan terperinci perlu dinyatakan dalam borang penerimaan syarat penyertaan."]]
 ];
 
-/* ---------- Rendering ---------- */
+/* ---------- Rendering ----------
+   Each page only has some of these elements, so every part checks its element exists first. */
 (function () {
   const el = id => document.getElementById(id);
+  const set = (id, html) => { const n = el(id); if (n) n.innerHTML = html; };
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const TZ = "Asia/Kuala_Lumpur";
   const dayFmt = new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short", timeZone: TZ });
@@ -196,7 +198,7 @@ const RULES = [
       <span class="vs-team vs-away"><b>${esc(b)}</b>${crest(b)}</span>
     </span>`;
 
-  el("people").innerHTML = PEOPLE.map(p => `
+  set("people", PEOPLE.map(p => `
     <li class="person ${p.size === "lead" ? "person-lead" : ""} ${p.size === "wide" ? "person-wide" : ""}">
       ${p.photo
         ? `<img class="person-photo" src="${esc(p.photo)}" alt="${esc(p.name)}" loading="lazy">`
@@ -204,13 +206,13 @@ const RULES = [
       <span class="person-slash" aria-hidden="true"></span>
       <span class="person-name">${esc(p.name)}</span>
       <span class="person-role">${esc(p.role)}</span>
-    </li>`).join("");
+    </li>`).join(""));
 
-  el("team-grid").innerHTML = NS_TEAMS.map(t => `
+  set("team-grid", NS_TEAMS.map(t => `
     <li class="team">
       <img src="${crestPath(t)}" alt="NS ${esc(t)} crest" loading="lazy">
       <p class="team-name">NS ${esc(t)}</p>
-    </li>`).join("");
+    </li>`).join(""));
 
   const all = FIXTURES.flatMap(w => w.matches.map(([no, date, time, a, b]) => ({
     no, a, b, week: w.week, start: new Date(`${date}T${time}:00+08:00`), score: RESULTS[no]
@@ -224,8 +226,11 @@ const RULES = [
     ? { stage: `Regular Season · Week ${next.week} · Match ${String(next.no).padStart(2, "0")}`, a: next.a, b: next.b, start: next.start, format: "Best of 3" }
     : fin && { stage: fin.stage, a: fin.a, b: fin.b, start: new Date(fin.start), format: fin.format };
 
-  if (ticket) {
-    el("strip-text").textContent = `${ticket.a} vs ${ticket.b} · ${dateText(ticket.start)}`;
+  /* The red strip on the home page */
+  if (el("strip-text")) el("strip-text").textContent = ticket ? `${ticket.a} vs ${ticket.b} · ${dateText(ticket.start)}` : "Season 1 is complete";
+
+  /* The ticket and countdown on the NSGL page */
+  if (ticket && el("ticket")) {
     el("ticket").innerHTML = `
       <div class="ticket-main">
         <p class="eyebrow gold">${esc(ticket.stage)}</p>
@@ -245,8 +250,7 @@ const RULES = [
     };
     const timer = setInterval(tick, 1000);
     tick();
-  } else {
-    el("strip-text").textContent = "Season 1 is complete";
+  } else if (el("ticket")) {
     el("ticket").innerHTML = `<div class="ticket-main"><p class="display versus">Season 1 is complete</p></div>`;
   }
 
@@ -265,23 +269,25 @@ const RULES = [
       </li>`).join("");
     document.querySelectorAll(".week-tab").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.week === n)));
   }
-  el("week-tabs").innerHTML = FIXTURES.map(w => `<button class="week-tab" data-week="${w.week}" aria-pressed="false">Week ${w.week}<small>${esc(w.label)}</small></button>`).join("");
-  el("week-tabs").addEventListener("click", e => {
-    const b = e.target.closest(".week-tab");
-    if (b) showWeek(+b.dataset.week);
-  });
-  showWeek(next ? next.week : FIXTURES[FIXTURES.length - 1].week);
+  if (el("week-tabs")) {
+    el("week-tabs").innerHTML = FIXTURES.map(w => `<button class="week-tab" data-week="${w.week}" aria-pressed="false">Week ${w.week}<small>${esc(w.label)}</small></button>`).join("");
+    el("week-tabs").addEventListener("click", e => {
+      const b = e.target.closest(".week-tab");
+      if (b) showWeek(+b.dataset.week);
+    });
+    showWeek(next ? next.week : FIXTURES[FIXTURES.length - 1].week);
+  }
 
   /* Results and table, worked out from RESULTS using rules 11 and 12 */
   const played = all.filter(m => m.score);
-  el("results").innerHTML = played.length
+  set("results", played.length
     ? played.slice(-5).reverse().map(m => `
         <li class="result">
           <span class="pill win">${String(m.no).padStart(2, "0")}</span>
           ${versus(m.a, m.b)}
           <span class="score">${m.score[0]}-${m.score[1]}</span>
         </li>`).join("")
-    : `<li class="muted empty">No results yet. The season starts on 13 November.</li>`;
+    : `<li class="muted empty">No results yet. The season starts on 13 November.</li>`);
 
   const teams = {};
   all.forEach(m => [m.a, m.b].forEach(t => { teams[t] = teams[t] || { name: t, mw: 0, ml: 0, gw: 0, gl: 0, pts: 0, beat: [] }; }));
@@ -297,16 +303,16 @@ const RULES = [
   rows.sort((a, b) => b.pts - a.pts || b.h2h - a.h2h || b.mw - a.mw || b.gw - a.gw || a.name.localeCompare(b.name));
   const started = played.length > 0;
   const signed = n => (n > 0 ? "+" + n : String(n));
-  el("standings").innerHTML = rows.map((t, i) => `
+  set("standings", rows.map((t, i) => `
     <tr class="${started && i === 5 ? "cut" : ""}">
       <td>${started ? i + 1 : "-"}</td><td>${crest(t.name)}${esc(t.name)}</td><td>${t.mw}-${t.ml}</td><td>${t.gw}-${t.gl}</td><td>${signed(t.pts)}</td>
-    </tr>`).join("");
-  el("table-note").textContent = started
+    </tr>`).join(""));
+  if (el("table-note")) el("table-note").textContent = started
     ? "Top 6 reach the playoffs. Ties use head-to-head, match wins, then game wins; a tiebreaker BO3 may follow. The Tournament Manager confirms final seeding."
     : "Teams are listed alphabetically until results come in. Top 6 reach the playoffs, and Seeds #1 and #2 go straight to the Upper Semifinal.";
 
   /* Playoffs, key dates, prizes, points, sponsors, rules */
-  el("bracket").innerHTML = PLAYOFFS.map(r => `
+  set("bracket", PLAYOFFS.map(r => `
     <div class="round ${r.final ? "round-final" : ""}">
       <h4 class="eyebrow gold">${esc(r.round)}</h4>
       ${r.games.map(g => `
@@ -315,12 +321,12 @@ const RULES = [
           <p>${esc(g[2])}</p><p>${esc(g[3])}</p>
         </div>`).join("")}
       <p class="muted round-note">${esc(r.note)}</p>
-    </div>`).join("");
+    </div>`).join(""));
 
   const pairs = list => list.map(([a, b]) => `<li><span>${esc(a)}</span><b>${esc(b)}</b></li>`).join("");
-  el("key-dates").innerHTML = KEY_DATES.map(([d, t]) => `<li><b>${esc(d)}</b><span class="muted">${esc(t)}</span></li>`).join("");
-  el("prizes").innerHTML = pairs(PRIZES);
-  el("points").innerHTML = pairs(POINTS);
+  set("key-dates", KEY_DATES.map(([d, t]) => `<li><b>${esc(d)}</b><span class="muted">${esc(t)}</span></li>`).join(""));
+  set("prizes", pairs(PRIZES));
+  set("points", pairs(POINTS));
 
   const sponsorHtml = SPONSORS.map(s => `
     <li class="sponsor">
@@ -329,9 +335,9 @@ const RULES = [
     </li>`).join("");
   document.querySelectorAll(".sponsor-row").forEach(u => { u.innerHTML = sponsorHtml; });
 
-  el("rules-list").innerHTML = RULES.map(([n, title, items]) => `
+  set("rules-list", RULES.map(([n, title, items]) => `
     <details class="rule">
       <summary><span class="rule-no">${String(n).padStart(2, "0")}</span>${esc(title)}</summary>
       <ul>${items.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
-    </details>`).join("");
+    </details>`).join(""));
 })();

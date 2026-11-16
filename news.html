@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>News · Nightmare Syndicate</title>
+<meta name="description" content="The latest Nightmare Syndicate and NSGL news.">
+<link rel="icon" type="image/png" href="assets/ns-mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Red smoke, drawn in code so no image file is needed -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="red-smoke" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.006 0.009" numOctaves="6" seed="4"/>
+    <feColorMatrix values="0 0 0 0 0.62  0 0 0 0 0.03  0 0 0 0 0.09  3 0 0 0 -1.3"/>
+  </filter>
+</svg>
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="logo" href="index.html"><img src="assets/ns-horizontal.png" alt="Nightmare Syndicate home"></a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <ul>
+        <li><a href="nsgl.html">NSGL</a></li>
+        <li><a href="rules.html">Rules</a></li>
+        <li><a href="news.html" aria-current="page">News</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="teams.html">Teams</a></li>
+        <li><a href="partners.html">Partners</a></li>
+      </ul>
+    </nav>
+    <div class="bar-right">
+      <!-- Shop is closed for now. To reopen: remove hidden here and on #shop (index.html), and add a Shop link to the nav on every page. -->
+      <span class="bag" hidden>Bag (<span id="bag-count">0</span>)</span>
+      <button class="btn-quiet menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="news" id="news" aria-labelledby="news-title">
+    <div class="wrap">
+      <div class="section-head"><h1 id="news-title" class="slash page-title">Latest news</h1></div>
+      <div class="news-grid">
+        <article class="lead-story" id="lead-story"></article>
+        <ul class="news-list" id="news-list"></ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <img src="assets/ns-horizontal.png" alt="Nightmare Syndicate">
+    <a class="text-link" href="https://wa.me/60176349402?text=Hi%20min%2C%20saya%20nak%20join%20community" target="_blank" rel="noopener">Join the community on WhatsApp</a>
+    <span class="muted">© 2026 Nightmare Syndicate</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script src="site.js"></script>
+</body>
+</html>

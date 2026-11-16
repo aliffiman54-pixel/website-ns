@@ -9,370 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-  /* Design tokens from the NS brand kit */
-  :root {
-    color-scheme: dark;
-    --red: #A50E2B;        /* Primary (Red NS) */
-    --white: #FFFFFF;      /* Secondary */
-    --base: #0B0B0D;       /* Base (Black) */
-    --grey: #6B6B6B;       /* Neutral: lines only, too dark for body text on black */
-    --gold: #FFC53D;       /* Accent: NSGL league */
-    --flame: #E5132F;      /* Bright red from the kit's slashes and smoke: graphics and large text only */
-    --surface: #17171B;
-    --soft: #B8B8BC;       /* Secondary text on black */
-
-    /* Monument Extended is used first if you add the licensed font; Bebas Neue is the kit's alternative */
-    --font-display: "Monument Extended", "Bebas Neue", Impact, sans-serif;
-    --font-text: "Montserrat", "Poppins", Arial, sans-serif;
-
-    --text-s: 0.875rem;
-    --text-m: 1rem;
-    --text-l: 1.5rem;
-    --text-xl: clamp(2.5rem, 6vw, 4rem);
-    --text-2xl: clamp(3.25rem, 9vw, 7.5rem);
-
-    --space-1: 4px;
-    --space-2: 8px;
-    --space-3: 16px;
-    --space-4: 24px;
-    --space-5: 32px;
-    --space-6: 48px;
-    --space-7: 64px;
-    --space-8: 96px;
-
-    --line: 1px solid var(--grey);
-    --page: 1280px;
-    --gutter: clamp(16px, 4vw, 48px);
-    --cut: 16px;
-    --chamfer: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
-    --fast: 180ms ease;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background: var(--base);
-    color: var(--white);
-    font: 400 var(--text-m)/1.6 var(--font-text);
-  }
-  img, svg { display: block; max-width: 100%; }
-  a { color: inherit; }
-  h1, h2, h3, p, ul, ol, dl, dd, figure { margin: 0; padding: 0; }
-  ul, ol { list-style: none; }
-  section { scroll-margin-top: var(--space-8); }
-
-  h1, h2, .display {
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-style: italic;
-    text-transform: uppercase;
-    line-height: 1;
-    letter-spacing: 0.01em;
-  }
-  h1 { font-size: var(--text-2xl); text-wrap: balance; }
-  h2 { font-size: var(--text-xl); }
-  h3 { font-size: var(--text-l); font-weight: 700; line-height: 1.25; }
-
-  :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
-
-  .wrap { max-width: var(--page); margin-inline: auto; padding-inline: var(--gutter); }
-  .eyebrow { font-size: var(--text-s); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
-  .muted { color: var(--soft); }
-  .gold { color: var(--gold); }
-
-  /* Double slash from the kit's visual elements */
-  .slash::before {
-    content: ""; display: inline-block; width: 0.55em; height: 0.72em; margin-right: 0.35em;
-    background: linear-gradient(90deg, var(--flame) 58%, transparent 58% 72%, var(--flame) 72%);
-    transform: skewX(-28deg);
-  }
-  .section-head {
-    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
-    gap: var(--space-3); margin-bottom: var(--space-5);
-  }
-
-  /* Clip-path would cut off an outline, so these buttons turn gold on keyboard focus */
-  .btn {
-    display: inline-block; padding: var(--space-3) var(--space-5);
-    background: var(--red); color: var(--white); border: 0; cursor: pointer;
-    clip-path: var(--chamfer);
-    font: 700 var(--text-m)/1.2 var(--font-text); text-decoration: none;
-    transition: background var(--fast), color var(--fast);
-  }
-  .btn:hover { background: var(--flame); }
-  .btn:focus-visible { outline: 0; background: var(--gold); color: var(--base); }
-  .btn-quiet {
-    display: inline-block; padding: var(--space-2) var(--space-3);
-    background: transparent; color: var(--white); border: 1px solid var(--white); cursor: pointer;
-    font: 700 var(--text-s)/1.3 var(--font-text); text-decoration: none;
-    transition: background var(--fast), color var(--fast);
-  }
-  .btn-quiet:hover { background: var(--white); color: var(--base); }
-  .text-link { font-weight: 700; text-underline-offset: var(--space-1); transition: color var(--fast); }
-  .text-link:hover { color: var(--gold); }
-
-  .smoke { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-
-  /* Header */
-  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--base); }
-  .site-header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--base); border-bottom: 1px solid var(--red); }
-  .bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); min-height: var(--space-7); }
-  .logo img { height: var(--space-5); width: auto; }
-  .nav ul { display: flex; gap: var(--space-4); }
-  .nav a { font-weight: 500; text-decoration: none; padding-block: var(--space-1); border-bottom: 2px solid transparent; transition: border-color var(--fast); }
-  .nav a:hover { border-color: var(--flame); }
-  .bar-right { display: flex; align-items: center; gap: var(--space-3); }
-  .bag { font-weight: 700; white-space: nowrap; }
-  .menu-toggle { display: none; }
-
-  /* Hero */
-  .hero { position: relative; overflow: hidden; }
-  .hero .smoke { -webkit-mask-image: linear-gradient(to left, #000 25%, transparent 80%); mask-image: linear-gradient(to left, #000 25%, transparent 80%); }
-  .hero-grid { position: relative; display: grid; grid-template-columns: 7fr 5fr; align-items: center; gap: var(--space-5); padding-block: var(--space-7); }
-  .hero-copy { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); }
-  .hero-copy p.lead { font-size: var(--text-l); line-height: 1.35; max-width: 32ch; }
-  .hero-mark { width: min(100%, 480px); margin-inline: auto; filter: drop-shadow(0 0 var(--space-5) var(--red)); }
-  .next-strip { position: relative; background: var(--red); }
-  .next-strip .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-4); padding-block: var(--space-3); }
-  .next-strip .text-link:hover { color: var(--white); text-decoration-thickness: 2px; }
-
-  /* Shop */
-  .shop { padding-block: var(--space-8); }
-  .shop-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--space-5) var(--space-4); }
-  .product { grid-column: span 3; display: flex; flex-direction: column; gap: var(--space-2); }
-  .product:first-child { grid-column: span 6; grid-row: span 2; }
-  .product-art { background: var(--surface); padding: var(--space-4); flex: 1; display: grid; place-items: center; clip-path: var(--chamfer); transition: background var(--fast); }
-  .product:hover .product-art { background: var(--red); }
-  .product-row { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); }
-  .product h3 { font-size: var(--text-m); }
-  .product:first-child h3 { font-size: var(--text-l); }
-  .price { font-weight: 700; white-space: nowrap; }
-
-  /* League */
-  .league { background: var(--surface); padding-block: var(--space-8); }
-  .nsgl { font-size: var(--text-xl); }
-  .nsgl span { color: var(--gold); }
-  .ticket-frame { background: var(--gold); padding: 2px; clip-path: var(--chamfer); margin-bottom: var(--space-7); }
-  .ticket { display: grid; grid-template-columns: 2fr 1fr; background: var(--base); clip-path: var(--chamfer); }
-  .ticket-main { padding: var(--space-5); }
-  .versus { font-size: var(--text-xl); margin-block: var(--space-2) var(--space-3); }
-  .vs-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: var(--space-3); align-items: center; }
-  .vs-team { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-2); min-width: 0; text-align: right; }
-  .vs-team b { font-weight: 700; min-width: 0; }
-  .vs-away { justify-content: flex-start; text-align: left; }
-  .vs-team .crest { margin-right: 0; flex: none; }
-  .vs { font-size: var(--text-s); font-weight: 700; color: var(--soft); }
-  .versus .vs-team b { font-weight: 400; }
-  .versus .vs { font-size: inherit; font-weight: 400; color: var(--flame); }
-  .versus .crest { width: var(--space-7); height: var(--space-7); }
-  .ticket-side { padding: var(--space-5); border-left: 1px dashed var(--grey); display: flex; flex-direction: column; justify-content: center; gap: var(--space-2); }
-  .count { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-2); text-align: center; }
-  .count b { display: block; font: 400 var(--text-l)/1.2 var(--font-display); font-variant-numeric: tabular-nums; }
-  .count small { font-size: var(--text-s); color: var(--soft); }
-  .match-cols { display: grid; grid-template-columns: 5fr 7fr; gap: var(--space-6); }
-  .match-cols h3 { margin-bottom: var(--space-3); }
-  .result { display: grid; grid-template-columns: auto 1fr auto; gap: var(--space-3); align-items: center; padding-block: var(--space-3); border-top: var(--line); }
-  .pill { display: inline-block; width: var(--space-5); text-align: center; font-weight: 700; padding-block: var(--space-1); background: var(--grey); }
-  .pill.win { background: var(--red); }
-  .score { font-weight: 700; font-variant-numeric: tabular-nums; }
-  .table-scroll { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-  th { text-align: right; font-size: var(--text-s); color: var(--soft); font-weight: 500; padding: var(--space-2); }
-  td { text-align: right; padding: var(--space-3) var(--space-2); border-top: var(--line); }
-  th:nth-child(-n+2), td:nth-child(-n+2) { text-align: left; }
-  tr.cut td { border-bottom: 2px solid var(--gold); }
-
-  .small { font-size: var(--text-s); margin-top: var(--space-3); }
-  .block { margin-bottom: var(--space-7); }
-  .block > h3 { margin-bottom: var(--space-3); }
-  .league-hero { display: grid; grid-template-columns: 5fr 7fr; gap: var(--space-5); align-items: center; padding: var(--space-5); background: #000; clip-path: var(--chamfer); margin-bottom: var(--space-6); }
-  .league-hero > * { min-width: 0; }
-  .anthem-video { display: block; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; background: #000; border: 1px solid var(--gold); }
-  .league-intro { font-size: var(--text-l); line-height: 1.35; max-width: 40ch; margin-bottom: var(--space-5); }
-  .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); }
-  .facts dt { font: italic 400 var(--text-xl)/1.1 var(--font-display); color: var(--gold); }
-  .facts dd { font-size: var(--text-s); color: var(--soft); }
-
-  .week-tabs { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--space-2); margin-bottom: var(--space-3); }
-  .week-tab {
-    padding: var(--space-2); background: var(--base); color: var(--white); border: var(--line); cursor: pointer;
-    font: 700 var(--text-s)/1.3 var(--font-text); text-align: left;
-    transition: background var(--fast), border-color var(--fast);
-  }
-  .week-tab small { display: block; font-weight: 400; color: var(--soft); }
-  .week-tab:hover { border-color: var(--white); }
-  .week-tab[aria-pressed="true"] { background: var(--red); border-color: var(--red); }
-  .week-tab[aria-pressed="true"] small { color: var(--white); }
-  .week-note { font-size: var(--text-s); font-weight: 700; margin-bottom: var(--space-2); }
-  .fixture { display: grid; grid-template-columns: var(--space-5) 11rem 1fr auto; gap: var(--space-3); align-items: center; padding-block: var(--space-3); border-top: var(--line); }
-  .fixture-no { font-weight: 700; color: var(--soft); font-variant-numeric: tabular-nums; }
-  .empty { padding-block: var(--space-3); border-top: var(--line); }
-
-  .bracket { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); margin-top: var(--space-4); align-items: start; }
-  .round h4 { margin: 0 0 var(--space-3); }
-  .game { background: var(--base); border: var(--line); padding: var(--space-3); margin-bottom: var(--space-2); }
-  .game-head { display: flex; justify-content: space-between; font-size: var(--text-s); font-weight: 700; color: var(--soft); margin-bottom: var(--space-1); }
-  .round-final .game { border-color: var(--gold); }
-  .round-note { font-size: var(--text-s); }
-
-  .info-cols { display: grid; grid-template-columns: 5fr 4fr 4fr; gap: var(--space-6); margin-bottom: var(--space-7); }
-  .info-cols h3 { margin-bottom: var(--space-3); }
-  .info-list li { display: flex; justify-content: space-between; gap: var(--space-3); padding-block: var(--space-2); border-top: var(--line); }
-  .info-list.stacked li { display: grid; grid-template-columns: 8rem 1fr; }
-  .league-sponsors { margin-bottom: 0; }
-
-  .sponsor-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
-  .sponsor { display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-4); border: var(--line); text-align: center; font-size: var(--text-s); }
-  .sponsor img { height: calc(var(--space-8) + var(--space-5)); width: 100%; object-fit: contain; }
-
-  .rules { padding-block: var(--space-8); }
-  .rules-list { columns: 2; column-gap: var(--space-5); }
-  .rule { break-inside: avoid; border-top: var(--line); }
-  .rule summary { display: flex; gap: var(--space-3); padding-block: var(--space-3); cursor: pointer; font-weight: 700; transition: color var(--fast); }
-  .rule summary:hover { color: var(--gold); }
-  .rule-no { color: var(--soft); font-variant-numeric: tabular-nums; }
-  .rule ul { padding: 0 0 var(--space-3) var(--space-6); list-style: disc; color: var(--soft); }
-  .rule li { margin-bottom: var(--space-2); }
-
-  /* News */
-  .news { padding-block: var(--space-8); }
-  .news-grid { display: grid; grid-template-columns: 7fr 5fr; gap: var(--space-6); }
-  .lead-story h3 { font: italic 400 var(--text-xl)/1.02 var(--font-display); text-transform: uppercase; margin-block: var(--space-3); }
-  .lead-story p { max-width: 58ch; }
-  .news-list li { padding-block: var(--space-4); border-top: var(--line); }
-  .news-list li:first-child { border-top: 0; padding-top: 0; }
-  .news-list h3 { font-size: var(--text-m); margin-top: var(--space-1); }
-  .news-list p:last-child { margin-top: var(--space-2); }
-
-  /* About */
-  .about { position: relative; overflow: hidden; background: var(--base); padding-block: var(--space-8); border-block: 1px solid var(--red); }
-  .about .wrap { position: relative; display: grid; grid-template-columns: 7fr 5fr; gap: var(--space-6); align-items: center; }
-  .about h2 { font-size: var(--text-2xl); }
-  .about-copy { margin-top: var(--space-4); font-size: var(--text-l); line-height: 1.35; max-width: 34ch; }
-  .structure { display: flex; flex-direction: column; align-items: center; }
-  .about .smoke { opacity: 0.6; }
-  .about-cta { margin-top: var(--space-4); }
-  .structure-card { width: 100%; background: #000; padding: var(--space-4); clip-path: var(--chamfer); text-align: center; }
-  .structure-card img { width: min(100%, 220px); margin: 0 auto var(--space-2); }
-  .structure-card .nsgl { line-height: 1; margin-bottom: var(--space-2); }
-  .structure-line { width: 2px; height: var(--space-5); background: var(--white); }
-
-  .story { padding-block: var(--space-8) 0; }
-  .story-grid { display: grid; grid-template-columns: 7fr 5fr; gap: var(--space-6); margin-bottom: var(--space-6); }
-  .story-grid > * { min-width: 0; }
-  .story-grid h3 { margin-bottom: var(--space-3); }
-  .story-copy { max-width: 60ch; }
-  .story-copy + .story-copy { margin-top: var(--space-3); }
-  .facts.facts-3 { grid-template-columns: repeat(3, 1fr); margin-bottom: var(--space-6); }
-  .people-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-4); margin-bottom: var(--space-3); }
-  .people { display: grid; grid-template-columns: repeat(10, 1fr); gap: var(--space-3); }
-  .person { position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: var(--space-1); aspect-ratio: 4 / 5; padding: var(--space-3); background: #000; clip-path: var(--chamfer); min-width: 0; grid-column: span 2; }
-  .person-lead { aspect-ratio: 16 / 9; }
-  .person-lead { grid-column: span 5; }
-  .person .smoke { opacity: 0.75; }
-  .person-mark { position: absolute; top: 12%; left: 50%; width: 70%; max-width: 280px; transform: translateX(-50%); opacity: 0.2; }
-  .person-lead .person-mark { top: 16%; width: 40%; }
-  .person-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; }
-  .person::after { content: ""; position: absolute; inset: 40% 0 0; background: linear-gradient(to bottom, transparent, #000 75%); }
-  .person-slash { position: absolute; top: var(--space-3); right: var(--space-3); z-index: 1; width: var(--space-5); height: var(--space-3); background: linear-gradient(90deg, var(--flame) 58%, transparent 58% 72%, var(--flame) 72%); transform: skewX(-28deg); }
-  .person-name, .person-role { position: relative; z-index: 1; }
-  .person-name { font: italic 400 2rem/1 var(--font-display); text-transform: uppercase; overflow-wrap: anywhere; }
-  .person-lead .person-name { font-size: var(--text-xl); }
-  .person-role { font-size: var(--text-s); font-weight: 700; color: var(--gold); }
-  .crest { display: inline-block; width: var(--space-4); height: var(--space-4); margin-right: var(--space-2); vertical-align: middle; object-fit: contain; }
-  .teams { padding-block: var(--space-8); }
-  .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); }
-  .team img { width: 100%; aspect-ratio: 1; object-fit: contain; transition: transform var(--fast); }
-  .team:hover img { transform: scale(1.03); }
-  .team-name { margin-top: var(--space-2); font-weight: 700; text-align: center; }
-  .collab { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); align-items: center; margin-top: var(--space-6); padding: var(--space-5); background: #000; clip-path: var(--chamfer); }
-  .collab-logos { display: flex; align-items: center; justify-content: center; gap: var(--space-4); min-width: 0; }
-  .collab-ns { width: 40%; min-width: 0; }
-  .collab-v { width: 40%; min-width: 0; aspect-ratio: 1; object-fit: contain; }
-  .collab-x { font: italic 400 var(--text-xl)/1 var(--font-display); color: var(--gold); }
-  .collab-copy { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
-
-  .doors { display: grid; grid-template-columns: 1fr 1fr; border-block: var(--line); }
-  .door { padding: var(--space-6) var(--gutter) var(--space-6) 0; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); }
-  .door + .door { padding-left: var(--gutter); padding-right: 0; border-left: var(--line); }
-
-  /* Partners */
-  .partners { padding-block: var(--space-8); }
-  .pitch { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); background: var(--surface); padding: var(--space-5); clip-path: var(--chamfer); align-items: center; }
-  .pitch-copy { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); }
-  .socials li { padding-block: var(--space-2); border-top: var(--line); font-weight: 700; }
-  .socials li:first-child { border-top: 0; }
-
-  .site-footer { border-top: 1px solid var(--red); padding-block: var(--space-5); }
-  .site-footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3) var(--space-4); font-size: var(--text-s); }
-  .site-footer img { height: var(--space-5); width: auto; }
-
-  .toast {
-    position: fixed; left: var(--space-3); right: var(--space-3); bottom: var(--space-3); z-index: 20;
-    max-width: 480px; margin-inline: auto; padding: var(--space-3);
-    background: var(--white); color: var(--base); font-weight: 500;
-    opacity: 0; transform: translateY(var(--space-2)); pointer-events: none;
-    transition: opacity var(--fast), transform var(--fast);
-  }
-  .toast.show { opacity: 1; transform: none; }
-
-  @media (max-width: 960px) {
-    .hero-grid, .news-grid, .match-cols, .pitch, .about .wrap, .league-hero { grid-template-columns: 1fr; }
-    .league-hero img { width: min(100%, 420px); margin-inline: auto; }
-    .hero-mark { width: min(70%, 360px); margin-inline: 0; }
-    .product, .product:first-child { grid-column: span 6; grid-row: auto; }
-    .product:first-child { grid-column: span 12; }
-    .ticket { grid-template-columns: 1fr; }
-    .ticket-side { border-left: 0; border-top: 1px dashed var(--grey); }
-    .week-tabs { grid-template-columns: repeat(3, 1fr); }
-    .bracket { grid-template-columns: 1fr 1fr; }
-    .info-cols { grid-template-columns: 1fr 1fr; }
-    .info-cols > :first-child { grid-column: 1 / -1; }
-    .rules-list { columns: 1; }
-  }
-  @media (max-width: 880px) {
-    .menu-toggle { display: inline-block; }
-    .nav { display: none; position: absolute; left: 0; right: 0; top: 100%; background: var(--base); border-bottom: 1px solid var(--red); padding: var(--space-3) var(--gutter); }
-    .nav.open { display: block; }
-    .nav ul { flex-direction: column; gap: var(--space-2); }
-  }
-  @media (max-width: 720px) {
-    .story { padding-block: var(--space-7) 0; }
-    .story-grid { grid-template-columns: 1fr; }
-    .people { grid-template-columns: 1fr 1fr; }
-    .person { grid-column: span 1; }
-    .person-lead, .person-wide { grid-column: span 2; }
-    .person-wide { aspect-ratio: 1; }
-    .person-wide .person-mark { top: 16%; width: 40%; }
-    .team-grid, .collab { grid-template-columns: 1fr 1fr; }
-    .collab { grid-template-columns: 1fr; }
-    .teams { padding-block: var(--space-7); }
-    .doors { grid-template-columns: 1fr; }
-    .door, .door + .door { padding-inline: 0; border-left: 0; }
-    .door + .door { border-top: var(--line); }
-    .shop, .league, .rules, .news, .about, .partners { padding-block: var(--space-7); }
-    .facts, .sponsor-row { grid-template-columns: 1fr 1fr; }
-    .fixture { grid-template-columns: var(--space-5) 1fr auto; gap: var(--space-2) var(--space-3); }
-    .fixture-teams { grid-column: 1 / -1; grid-row: 2; }
-    .fixture .score { grid-column: 3; grid-row: 1; }
-    .vs-row { gap: var(--space-2); }
-    .vs-team { font-size: var(--text-s); }
-    .versus .vs-team { font-size: inherit; flex-direction: column; justify-content: flex-start; text-align: center; }
-    .versus .vs-away { flex-direction: column-reverse; justify-content: flex-end; }
-  }
-  @media (max-width: 480px) {
-    .logo img { height: var(--space-4); }
-    .product, .product:first-child { grid-column: span 12; }
-    .bracket, .info-cols, .sponsor-row { grid-template-columns: 1fr; }
-    .week-tabs { grid-template-columns: 1fr 1fr; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    *, *::before, *::after { transition: none !important; }
-  }
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -386,19 +23,19 @@
 
 <header class="site-header">
   <div class="wrap bar">
-    <a class="logo" href="#top"><img src="assets/ns-horizontal.png" alt="Nightmare Syndicate home"></a>
+    <a class="logo" href="index.html"><img src="assets/ns-horizontal.png" alt="Nightmare Syndicate home"></a>
     <nav class="nav" id="nav" aria-label="Main">
       <ul>
-        <li><a href="#nsgl">NSGL</a></li>
-        <li><a href="#rules">Rules</a></li>
-        <li><a href="#news">News</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#teams">Teams</a></li>
-        <li><a href="#partners">Partners</a></li>
+        <li><a href="nsgl.html">NSGL</a></li>
+        <li><a href="rules.html">Rules</a></li>
+        <li><a href="news.html">News</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="teams.html">Teams</a></li>
+        <li><a href="partners.html">Partners</a></li>
       </ul>
     </nav>
     <div class="bar-right">
-      <!-- Shop is closed for now. To reopen: remove hidden here and on #shop, and add the Shop link back to the nav. -->
+      <!-- Shop is closed for now. To reopen: remove hidden here and on #shop (index.html), and add a Shop link to the nav on every page. -->
       <span class="bag" hidden>Bag (<span id="bag-count">0</span>)</span>
       <button class="btn-quiet menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
     </div>
@@ -413,7 +50,7 @@
         <p class="eyebrow">Esports organization and community</p>
         <h1 id="hero-title">Your nightmare starts the moment we load in.</h1>
         <p class="lead">Home to competitive teams and the NSGL league. Season 1 starts on 13 November.</p>
-        <a class="btn" href="#nsgl">See the NSGL schedule</a>
+        <a class="btn" href="nsgl.html">See the NSGL schedule</a>
       </div>
       <img class="hero-mark" src="assets/ns-mark.png" alt="">
     </div>
@@ -421,202 +58,26 @@
       <div class="wrap">
         <span class="eyebrow">Next match</span>
         <span id="strip-text"></span>
-        <a class="text-link" href="#nsgl">Fixtures and table</a>
+        <a class="text-link" href="nsgl.html">Fixtures and table</a>
       </div>
     </div>
   </section>
 
-  <section class="league" id="nsgl" aria-labelledby="league-title">
+  <section class="explore" aria-labelledby="explore-title">
     <div class="wrap">
-      <div class="section-head">
-        <h2 id="league-title" class="slash">NS<span class="gold">GL</span> Season 1</h2>
-        <p class="muted">Nightmare Syndicate Grand League · 2026/2027</p>
-      </div>
-      <div class="league-hero">
-        <img src="assets/nsgl-logo.png" alt="NSGL, Nightmare Syndicate Grand League">
-        <div>
-          <p class="league-intro">An online Mobile Legends: Bang Bang league for community and amateur players.</p>
-          <dl class="facts">
-            <div><dt>10</dt><dd>Teams</dd></div>
-            <div><dt>45</dt><dd>Regular Season matches</dd></div>
-            <div><dt>Top 6</dt><dd>Reach the playoffs</dd></div>
-            <div><dt>RM1,000</dt><dd>Prize pool</dd></div>
-          </dl>
-        </div>
-      </div>
-
-      <div class="block anthem">
-        <h3>NSGL Anthem</h3>
-        <video class="anthem-video" controls playsinline preload="none" poster="assets/video/nsgl-anthem-poster.jpg">
-          <source src="assets/video/nsgl-anthem.mp4" type="video/mp4">
-          Your browser can't play this video.
-        </video>
-      </div>
-
-      <div class="ticket-frame"><div class="ticket" id="ticket"></div></div>
-
-      <div class="block">
-        <h3>Regular Season schedule</h3>
-        <div class="week-tabs" id="week-tabs"></div>
-        <p class="week-note gold" id="week-note" hidden></p>
-        <ol class="fixtures" id="fixtures"></ol>
-        <p class="muted small">All times are Malaysia time (MYT). Start times may shift if an earlier match runs long or there's a technical issue.</p>
-      </div>
-
-      <div class="match-cols block">
-        <div>
-          <h3>Recent results</h3>
-          <ol id="results"></ol>
-        </div>
-        <div>
-          <h3>League table</h3>
-          <div class="table-scroll" tabindex="0" role="region" aria-label="League table">
-            <table>
-              <thead><tr><th>#</th><th>Team</th><th><abbr title="Matches won and lost">M</abbr></th><th><abbr title="Games won and lost">G</abbr></th><th><abbr title="Points">Pts</abbr></th></tr></thead>
-              <tbody id="standings"></tbody>
-            </table>
-          </div>
-          <p class="muted small" id="table-note"></p>
-        </div>
-      </div>
-
-      <div class="block">
-        <h3>Top 6 playoffs</h3>
-        <p class="muted small">Hybrid Elimination. M1 to M6 are played on 15-17 Jan, times to be confirmed. Seeds are set after the Regular Season.</p>
-        <div class="bracket" id="bracket"></div>
-      </div>
-
-      <div class="info-cols">
-        <div>
-          <h3>Key dates</h3>
-          <ul class="info-list stacked" id="key-dates"></ul>
-        </div>
-        <div>
-          <h3>Prizes</h3>
-          <ul class="info-list" id="prizes"></ul>
-        </div>
-        <div>
-          <h3>Regular Season points</h3>
-          <ul class="info-list" id="points"></ul>
-          <p class="muted small">Playoff series don't award league points.</p>
-        </div>
-      </div>
-
-      <div class="block league-sponsors">
-        <h3>League partners</h3>
-        <ul class="sponsor-row"></ul>
-      </div>
+      <div class="section-head"><h2 id="explore-title" class="slash">Explore NS</h2></div>
+      <ul class="explore-grid">
+        <li><a class="explore-card" href="nsgl.html"><span class="eyebrow gold">NSGL</span><h3>Schedule, results and table</h3><span class="muted">Every Season 1 match, the league table and the playoff bracket.</span></a></li>
+        <li><a class="explore-card" href="rules.html"><span class="eyebrow gold">Rules</span><h3>Official rules</h3><span class="muted">All 29 NSGL rules, in the official Bahasa Melayu wording.</span></a></li>
+        <li><a class="explore-card" href="news.html"><span class="eyebrow gold">News</span><h3>Latest news</h3><span class="muted">Deadlines, announcements and league updates.</span></a></li>
+        <li><a class="explore-card" href="about.html"><span class="eyebrow gold">About</span><h3>This is the syndicate</h3><span class="muted">Our story and the people behind NS.</span></a></li>
+        <li><a class="explore-card" href="teams.html"><span class="eyebrow gold">Teams</span><h3>Our teams</h3><span class="muted">The eight squads under Nightmare Syndicate.</span></a></li>
+        <li><a class="explore-card" href="partners.html"><span class="eyebrow gold">Partners</span><h3>Partners</h3><span class="muted">Our sponsors, and how to put your brand on the league.</span></a></li>
+      </ul>
     </div>
   </section>
 
-  <section class="rules" id="rules" aria-labelledby="rules-title">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="rules-title" class="slash">Official rules</h2>
-        <p class="muted">Official wording in Bahasa Melayu</p>
-      </div>
-      <div class="rules-list" id="rules-list"></div>
-    </div>
-  </section>
-
-  <section class="shop" id="shop" aria-labelledby="shop-title" hidden>
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="shop-title" class="slash">Official kit</h2>
-      </div>
-      <ul class="shop-grid" id="products"></ul>
-    </div>
-  </section>
-
-  <section class="news" id="news" aria-labelledby="news-title">
-    <div class="wrap">
-      <div class="section-head"><h2 id="news-title" class="slash">Latest news</h2></div>
-      <div class="news-grid">
-        <article class="lead-story" id="lead-story"></article>
-        <ul class="news-list" id="news-list"></ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="about" id="about" aria-labelledby="about-title">
-    <svg class="smoke" aria-hidden="true"><rect width="100%" height="100%" filter="url(#red-smoke)"/></svg>
-    <div class="wrap">
-      <div>
-        <h2 id="about-title">This is the syndicate.</h2>
-        <p class="about-copy">Nightmare Syndicate (NS) is an esports organization and community, home to competitive teams and the NSGL league.</p>
-        <a class="btn about-cta" href="https://wa.me/60176349402?text=Hi%20min%2C%20saya%20nak%20join%20community" target="_blank" rel="noopener">Join the community on WhatsApp</a>
-      </div>
-      <div class="structure">
-        <div class="structure-card">
-          <img src="assets/ns-stacked.png" alt="Nightmare Syndicate">
-          <p class="muted">Organization and community</p>
-        </div>
-        <div class="structure-line"></div>
-        <div class="structure-card">
-          <img src="assets/nsgl-logo.png" alt="NSGL, Nightmare Syndicate Grand League">
-          <p class="muted">Official league</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="story" aria-labelledby="story-title">
-    <div class="wrap">
-      <div class="story-grid">
-        <div>
-          <h3 id="story-title">Our story</h3>
-          <p class="muted story-copy">Nightmare Syndicate started as a small MLBB team of seven, focused on ranked games and scrims. Commitments and limited time later took most of that squad in different directions.</p>
-          <p class="muted story-copy">In July 2026, with help from friends, NS launched as a full community for the millennial generation, and the response was strong. Today it runs eight main squads, works with sponsors and is preparing its own league.</p>
-        </div>
-        <div>
-          <h3>How we got here</h3>
-          <ol class="info-list stacked">
-            <li><b>17 Apr 2026</b><span class="muted">Nightmare Syndicate is founded</span></li>
-            <li><b>Jul 2026</b><span class="muted">The NS community launches</span></li>
-            <li><b>Sep 2026</b><span class="muted">NS runs the NSGT tournament</span></li>
-            <li><b>13 Nov 2026</b><span class="muted">NSGL Season 1 begins</span></li>
-          </ol>
-        </div>
-      </div>
-
-      <dl class="facts facts-3">
-        <div><dt>~80</dt><dd>Community members</dd></div>
-        <div><dt>8 + 1</dt><dd>Main squads plus one outside partner squad</dd></div>
-        <div><dt>70+</dt><dd>Local and international scrims and fun matches</dd></div>
-      </dl>
-
-      <div class="people-head">
-        <h3>The people behind NS</h3>
-        <p class="eyebrow gold">One vision. One syndicate. One legacy.</p>
-      </div>
-      <ul class="people" id="people"></ul>
-    </div>
-  </section>
-
-  <section class="teams" id="teams" aria-labelledby="teams-title">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="teams-title" class="slash">Our teams</h2>
-        <p class="muted">Eight teams under Nightmare Syndicate</p>
-      </div>
-      <ul class="team-grid" id="team-grid"></ul>
-
-      <div class="collab">
-        <div class="collab-logos">
-          <img class="collab-ns" src="assets/ns-mark.png" alt="Nightmare Syndicate">
-          <span class="collab-x" aria-hidden="true">×</span>
-          <img class="collab-v" src="assets/teams/vortex-v.png" alt="Vortex V" loading="lazy">
-        </div>
-        <div class="collab-copy">
-          <p class="eyebrow gold">Current collab</p>
-          <h3>NS × Vortex V</h3>
-          <p class="muted">Nightmare Syndicate and Vortex V are working together for young players.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="wrap doors">
+  <div class="wrap doors home-doors">
     <div class="door">
       <p class="eyebrow gold">Academy</p>
       <h3>Think you can go pro?</h3>
@@ -631,26 +92,12 @@
     </div>
   </div>
 
-  <section class="partners" id="partners" aria-labelledby="partners-title">
+  <section class="shop" id="shop" aria-labelledby="shop-title" hidden>
     <div class="wrap">
-      <div class="section-head"><h2 id="partners-title" class="slash">Partners</h2></div>
-      <div class="block">
-        <h3>Current partners</h3>
-        <ul class="sponsor-row"></ul>
+      <div class="section-head">
+        <h2 id="shop-title" class="slash">Official kit</h2>
       </div>
-      <div class="pitch">
-        <div class="pitch-copy">
-          <h3>Put your brand on the league</h3>
-          <p class="muted">Reach the NS community and every NSGL matchday. Tell us what you want to achieve and we'll build a plan.</p>
-          <a class="btn-quiet" href="https://wa.me/60176349402?text=Hi%20min%2C%20saya%20berminat%20nak%20jadi%20partner%20NS" target="_blank" rel="noopener">Partner with us on WhatsApp</a>
-        </div>
-        <div>
-          <p class="eyebrow gold">Watch NSGL live</p>
-          <ul class="socials">
-            <li><a class="text-link" href="https://www.tiktok.com/@nightmaresyndicate_my">TikTok @nightmaresyndicate_my</a></li>
-          </ul>
-        </div>
-      </div>
+      <ul class="shop-grid" id="products"></ul>
     </div>
   </section>
 </main>
@@ -665,87 +112,7 @@
 
 <div class="toast" id="toast" role="status"></div>
 
-<script>
-  /* ---------- Shop and news content. League data is in league.js. Products are sample data. ---------- */
-  const SITE = {
-    products: [
-      { name: "NS Home Jersey", price: 149, base: "#A50E2B", trim: "#0B0B0D", num: "01", label: "#FFFFFF" },
-      { name: "NS Away Jersey", price: 149, base: "#FFFFFF", trim: "#A50E2B", num: "01", label: "#0B0B0D" },
-      { name: "NS Black Edition Jersey", price: 169, base: "#0B0B0D", trim: "#E5132F", num: "13", label: "#FFFFFF" },
-      { name: "NSGL Gold Edition Jersey", price: 169, base: "#0B0B0D", trim: "#FFC53D", num: "GL", label: "#FFC53D" },
-      { name: "NS Training Top", price: 89, base: "#6B6B6B", trim: "#0B0B0D", num: "NS", label: "#FFFFFF" }
-    ],
-    news: [
-      { date: "13 Nov 2026", title: "NSGL Season 1 starts on 13 November", text: "Ten teams play 45 best-of-three matches over six weeks, and the top six go through to the playoffs. NS Delta and The OTC open the season at 9:00 PM MYT, live on TikTok @nightmaresyndicate_my." },
-      { date: "6 Nov 2026", title: "Roster deadline: Friday, 6 November", text: "Teams can register up to 8 players and 2 coaches. Changes after that wait for the transfer windows." },
-      { date: "12 Nov 2026", title: "Team registration fee due 12 November", text: "RM30 per team, paid once for the whole season." },
-      { date: "31 Jan 2027", title: "RM1,000 prize pool, decided on 31 January", text: "The Champion takes RM500. The Grand Final is a best-of-seven with no bracket reset." }
-    ]
-  };
-
-  /* ---------- Rendering ---------- */
-  const $ = id => document.getElementById(id);
-  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-
-  function jersey(p, id) {
-    const shape = "M84 28 40 48 14 96l32 18 14-22v126h120V92l14 22 32-18-26-48-44-20q-36 24-72 0z";
-    return `<svg viewBox="0 0 240 240" role="img" aria-label="${esc(p.name)}">
-      <clipPath id="clip-${id}"><path d="${shape}"/></clipPath>
-      <g clip-path="url(#clip-${id})">
-        <rect width="240" height="240" fill="${p.base}"/>
-        <path d="M0 200 240 66v22L0 222zM0 228 240 94v9L0 237z" fill="${p.trim}"/>
-        <path d="M0 30h60L40 130 0 110zM240 30h-60l20 100 40-20z" fill="${p.trim}"/>
-      </g>
-      <path d="${shape}" fill="none" stroke="#6B6B6B" stroke-width="1.5"/>
-      <path d="M84 28q36 24 72 0" fill="none" stroke="${p.trim}" stroke-width="6"/>
-      <text x="120" y="172" text-anchor="middle" font-family="Bebas Neue, Impact, sans-serif" font-size="62" font-style="italic" fill="${p.label}" stroke="${p.base}" stroke-width="5" paint-order="stroke">${esc(p.num)}</text>
-    </svg>`;
-  }
-
-  $("products").innerHTML = SITE.products.map((p, i) => `
-    <li class="product">
-      <div class="product-art">${jersey(p, i)}</div>
-      <h3>${esc(p.name)}</h3>
-      <div class="product-row">
-        <span class="price">RM${p.price.toFixed(2)}</span>
-        <button class="btn-quiet" data-add="${esc(p.name)}">Add to bag</button>
-      </div>
-    </li>`).join("");
-
-  const [lead, ...rest] = SITE.news;
-  $("lead-story").innerHTML = `
-    <p class="eyebrow muted">${esc(lead.date)}</p>
-    <h3>${esc(lead.title)}</h3>
-    <p>${esc(lead.text)}</p>`;
-  $("news-list").innerHTML = rest.map(n => `
-    <li>
-      <p class="eyebrow muted">${esc(n.date)}</p>
-      <h3>${esc(n.title)}</h3>
-      <p class="muted">${esc(n.text)}</p>
-    </li>`).join("");
-
-  /* ---------- Interactions ---------- */
-  let bag = 0, toastTimer;
-  document.addEventListener("click", e => {
-    const name = e.target.dataset && e.target.dataset.add;
-    if (!name) return;
-    $("bag-count").textContent = ++bag;
-    const toast = $("toast");
-    toast.textContent = `${name} added. Checkout isn't connected in this preview.`;
-    toast.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove("show"), 3000);
-  });
-
-  const toggle = $("menu-toggle"), nav = $("nav");
-  toggle.addEventListener("click", () => {
-    const open = nav.classList.toggle("open");
-    toggle.setAttribute("aria-expanded", open);
-  });
-  nav.addEventListener("click", e => {
-    if (e.target.tagName === "A") { nav.classList.remove("open"); toggle.setAttribute("aria-expanded", "false"); }
-  });
-</script>
+<script src="site.js"></script>
 <script src="league.js"></script>
 </body>
 </html>
