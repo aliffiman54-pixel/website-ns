@@ -1,0 +1,8 @@
+# Duplicate of the site root used for manual Netlify drag-and-drop uploads
+netlify-upload/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+node_modules/
