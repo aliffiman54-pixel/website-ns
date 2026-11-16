@@ -11,6 +11,8 @@ const RESULTS = {
   6: [0, 2], // NS Delta 0-2 Vortex V
   7: [2, 0], // The OTC 2-0 NS Havoc
   8: [1, 2], // NS Echo 1-2 NS Gamma
+  // Week 2
+  9: [2, 0], // NS Chaos 2-0 ESC
 };
 
 const FIXTURES = [
