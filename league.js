@@ -14,7 +14,7 @@ const RESULTS = {
   // Week 2
   9: [2, 0], // NS Chaos 2-0 ESC
   10: [1, 2], // NS Bravo 1-2 NS Foxtrot
-  11: [2, 0], // NS Delta 2-0 NS Havoc
+  11: [2, 1], // NS Delta 2-1 NS Havoc
   12: [2, 0], // Vortex V 2-0 NS Gamma
   13: [2, 0], // The OTC 2-0 ESC
   14: [0, 2], // NS Echo 0-2 NS Foxtrot
